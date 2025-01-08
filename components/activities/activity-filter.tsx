@@ -1,0 +1,3 @@
+'use client';
+
+// Rest of the existing code...
