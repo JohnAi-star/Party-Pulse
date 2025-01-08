@@ -1,3 +1,4 @@
+// app/activities/[id]/page.tsx
 import { Metadata } from 'next';
 import { activities } from '@/lib/data/activities';
 import ActivityHeader from '@/components/activities/activity-header';
@@ -45,10 +46,9 @@ export default function ActivityPage({ params }: Props) {
 
   return (
     <div>
-      {/* Pass the full activity object */}
       <ActivityHeader
       //@ts-ignore
-      activity={activity} />
+      activity={activity} /> {/* Pass activity to ActivityHeader */}
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
