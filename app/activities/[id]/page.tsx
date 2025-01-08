@@ -1,4 +1,3 @@
-// app/activities/[id]/page.tsx
 import { Metadata } from 'next';
 import { activities } from '@/lib/data/activities';
 import ActivityHeader from '@/components/activities/activity-header';
@@ -45,8 +44,8 @@ export default function ActivityPage({ params }: Props) {
   }
 
   return (
-    <div> 
-      <ActivityHeader 
+    <div>
+      <ActivityHeader
       //@ts-ignore
       activity={activity} />
       <div className="container py-8">
@@ -56,7 +55,7 @@ export default function ActivityPage({ params }: Props) {
           </div>
           <div>
             <div className="sticky top-24">
-              <BookingForm 
+              <BookingForm
               //@ts-ignore
               activity={activity} />
             </div>
