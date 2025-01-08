@@ -45,6 +45,7 @@ export default function ActivityPage({ params }: Props) {
 
   return (
     <div>
+      {/* Pass the full activity object */}
       <ActivityHeader
       //@ts-ignore
       activity={activity} />

@@ -1,19 +1,27 @@
 import React from 'react';
 
-interface ActivityHeaderProps {
-    title: string;
-    date: string;
-    description: string;
+// Assuming the structure of an Activity object
+interface Activity {
+  title: string;
+  date: string;
+  description: string;
+  image: string; // If your activity includes an image
 }
 
-const ActivityHeader: React.FC<ActivityHeaderProps> = ({ title, date, description }) => {
-    return (
-        <header className="activity-header">
-            <h1>{title}</h1>
-            <p>{date}</p>
-            <p>{description}</p>
-        </header>
-    );
+interface ActivityHeaderProps {
+  activity: Activity; // Accept the entire activity object
+}
+
+const ActivityHeader: React.FC<ActivityHeaderProps> = ({ activity }) => {
+  return (
+    <header className="activity-header">
+      <h1>{activity.title}</h1>
+      <p>{activity.date}</p>
+      <p>{activity.description}</p>
+      {/* Optionally display an image */}
+      {activity.image && <img src={activity.image} alt={activity.title} />}
+    </header>
+  );
 };
 
 export default ActivityHeader;
