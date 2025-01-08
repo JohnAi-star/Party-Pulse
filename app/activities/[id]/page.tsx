@@ -45,7 +45,7 @@ export default function ActivityPage({ params }: Props) {
   }
 
   return (
-    <div>
+    <div> 
       <ActivityHeader 
       //@ts-ignore
       activity={activity} />

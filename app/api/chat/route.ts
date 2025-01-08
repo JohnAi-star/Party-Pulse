@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 
     // Collect the streaming response text
     const streamChunks: string[] = [];
-    //@ts-ignore
+    //@ts-ignore 
     for await (const chunk of response[Symbol.asyncIterator]()) {
       streamChunks.push(chunk.choices[0].text); // Push each chunk's text
     }
