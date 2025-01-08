@@ -3,7 +3,7 @@ import { OpenAI } from 'openai';  // Make sure the OpenAI SDK is installed
 // Initialize OpenAI with your API key
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // Ensure your environment variable is set correctly
-});
+}); 
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
