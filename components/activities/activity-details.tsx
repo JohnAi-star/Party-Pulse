@@ -22,7 +22,7 @@ export type PaymentButtonProps = {
   activity: Activity;
   participants: number;
   date?: Date;
-  disabled?: boolean;
+  disabled?: boolean; 
 };
 
 // Your actual ActivityDetails component
