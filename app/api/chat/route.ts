@@ -1,15 +1,15 @@
-import { OpenAI } from 'openai';
+import { OpenAI } from 'openai';  // Make sure the OpenAI SDK is installed
 
+// Initialize OpenAI with your API key
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // Ensure this is set in your environment variables
+  apiKey: process.env.OPENAI_API_KEY, // Ensure your environment variable is set correctly
 });
 
 export async function POST(req: Request) {
-  // Parse the incoming request JSON for messages
   const { messages } = await req.json();
 
   try {
-    // Make a streaming request to OpenAI's chat API
+    // Send a request to OpenAI for chat completions with streaming enabled
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
@@ -20,33 +20,30 @@ export async function POST(req: Request) {
             Be friendly and concise. Provide specific activity recommendations when possible.
             Focus on our available categories: Team Building, Stag Parties, and Hen Parties.`,
         },
-        ...messages,
+        ...messages,  // Include user-provided messages
       ],
       temperature: 0.7,
       max_tokens: 200,
-      stream: true,  // Enable streaming
+      stream: true, // Enable streaming
     });
 
-    // Use async iterator to handle the streamed response
-    const stream = response[Symbol.asyncIterator]();
-
-    // Collect all the chunks of the response
+    // Collect the streaming response text
     const streamChunks: string[] = [];
     //@ts-ignore
-    for await (const chunk of stream) {
-      streamChunks.push(chunk.choices[0].text);  // Push the text content of each chunk
+    for await (const chunk of response[Symbol.asyncIterator]()) {
+      streamChunks.push(chunk.choices[0].text); // Push each chunk's text
     }
 
-    // Combine all chunks into a single string
-    const streamResponse = streamChunks.join("");  // Combine into full response
+    // Join the chunks into one complete response
+    const streamResponse = streamChunks.join(""); 
 
-    // Return the final response to the client
-    return new Response(streamResponse, {
+    // Return the final streamed response as JSON
+    return new Response(JSON.stringify({ text: streamResponse }), {
       headers: { 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
-    // Handle errors, such as invalid OpenAI API key or streaming issues
+    // Handle errors (e.g., invalid API key, bad request)
     console.error('Error with OpenAI streaming:', error);
     return new Response(
       JSON.stringify({ error: 'An error occurred during the request.' }),

@@ -1,3 +1,4 @@
+// app/activities/[id]/page.tsx
 import { Metadata } from 'next';
 import { activities } from '@/lib/data/activities';
 import ActivityHeader from '@/components/activities/activity-header';
@@ -17,7 +18,7 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata dynamically based on the activity
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
@@ -55,7 +56,6 @@ export default function ActivityPage({ params }: Props) {
           </div>
           <div>
             <div className="sticky top-24">
-              
               <BookingForm 
               //@ts-ignore
               activity={activity} />
