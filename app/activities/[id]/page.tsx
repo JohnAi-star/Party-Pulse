@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return {};
+    return {}; // Return an empty object if activity is not found
   }
 
   return {
