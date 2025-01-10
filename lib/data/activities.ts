@@ -8,6 +8,7 @@ export const activities: Activity[] = [
       'Work together to solve puzzles and escape within 60 minutes. Perfect for team building and group bonding.',
     image:
       'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      date: '2025-01-15',
     price: 25,
     location: 'London',
     duration: '1 hour',
@@ -38,6 +39,7 @@ export const activities: Activity[] = [
       'Learn to mix and create your own signature cocktails with professional mixologists.',
     image:
       'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      date: '2025-02-20',
     price: 45,
     location: 'Manchester',
     duration: '2 hours',

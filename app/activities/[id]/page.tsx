@@ -5,12 +5,12 @@ import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
+type Props = {
   params: {
     id: string;
   };
   searchParams: { [key: string]: string | string[] | undefined };
-}
+};
 
 // Generate static params for all activities
 export async function generateStaticParams() {
@@ -20,11 +20,11 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata dynamically based on the activity
-export async function generateMetadata({ params }: PageProps): Promise<Promise<Metadata>> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return {}; // Return an empty object if activity is not found
+    return {};
   }
 
   return {
@@ -39,16 +39,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Promise<M
 }
 
 // Dynamic route page component
-export default async function ActivityPage({ params }: PageProps) {
+export default function ActivityPage({ params }: Props) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return notFound(); // If activity is not found, show a "not found" page
+    notFound();
   }
+
+  const { title, date, description } = activity; // Extract required fields
+
+  const handleBookingSubmit = (formData: {
+    name: string;
+    email: string;
+    date: string;
+    time: string;
+    guests: number;
+  }) => {
+    // Handle booking logic here, e.g., send data to API or log it
+    console.log('Booking submitted:', formData);
+  };
 
   return (
     <div>
-      <ActivityHeader activity={activity} /> {/* TypeScript should infer the correct type */}
+      <ActivityHeader title={title} date={date} description={description} />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -56,7 +69,7 @@ export default async function ActivityPage({ params }: PageProps) {
           </div>
           <div>
             <div className="sticky top-24">
-              <BookingForm activity={activity} /> {/* TypeScript should infer the correct type */}
+              <BookingForm onSubmit={handleBookingSubmit} />
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ export type Activity = {
   title: string;
   description: string;
   image: string;
+  date: string;
   price: number;
   location: string;
   duration: string;
