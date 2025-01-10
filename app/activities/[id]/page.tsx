@@ -4,8 +4,8 @@ import ActivityHeader from '@/components/activities/activity-header';
 import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
-
-type Props = {
+import { PageProps } from 'next';
+type Props = PageProps & {
   params: {
     id: string;
   };
