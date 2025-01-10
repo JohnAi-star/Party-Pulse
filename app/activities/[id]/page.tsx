@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata dynamically based on the activity
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Promise<Metadata>> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
