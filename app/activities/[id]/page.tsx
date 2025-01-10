@@ -1,4 +1,3 @@
-// app/activities/[id]/page.tsx
 import { Metadata } from 'next';
 import { activities } from '@/lib/data/activities';
 import ActivityHeader from '@/components/activities/activity-header';
@@ -7,7 +6,10 @@ import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
 
 type Props = {
-  params: { id: string };
+  params: {
+    id: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 // Generate static params for all activities
@@ -18,11 +20,11 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata dynamically based on the activity
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return {}; // Return an empty object if activity is not found
+    return {};
   }
 
   return {
@@ -46,9 +48,9 @@ export default function ActivityPage({ params }: Props) {
 
   return (
     <div>
-      <ActivityHeader
+      <ActivityHeader 
       //@ts-ignore
-      activity={activity} /> {/* Pass activity to ActivityHeader */}
+      activity={activity} />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -56,7 +58,7 @@ export default function ActivityPage({ params }: Props) {
           </div>
           <div>
             <div className="sticky top-24">
-              <BookingForm
+              <BookingForm 
               //@ts-ignore
               activity={activity} />
             </div>
