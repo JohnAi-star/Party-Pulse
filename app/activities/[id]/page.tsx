@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return {};
+    return {}; // Return empty metadata if activity is not found
   }
 
   return {
@@ -43,7 +43,7 @@ export default function ActivityPage({ params }: Props) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    notFound();
+    notFound(); // If activity is not found, show 404
   }
 
   const { title, date, description } = activity; // Extract required fields
