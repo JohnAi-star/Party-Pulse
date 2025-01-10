@@ -43,7 +43,7 @@ export default async function ActivityPage({ params }: PageProps) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    notFound(); // If activity is not found, show a "not found" page
+    return notFound(); // If activity is not found, show a "not found" page
   }
 
   return (
