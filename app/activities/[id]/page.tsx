@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return {};
+    return {}; // Return an empty object if activity is not found
   }
 
   return {
@@ -43,14 +43,12 @@ export default function ActivityPage({ params }: Props) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    notFound();
+    notFound(); // If activity is not found, show a "not found" page
   }
 
   return (
     <div>
-      <ActivityHeader 
-      //@ts-ignore
-      activity={activity} />
+      <ActivityHeader activity={activity} /> {/* TypeScript should infer the correct type */}
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -58,9 +56,7 @@ export default function ActivityPage({ params }: Props) {
           </div>
           <div>
             <div className="sticky top-24">
-              <BookingForm 
-              //@ts-ignore
-              activity={activity} />
+              <BookingForm activity={activity} /> {/* TypeScript should infer the correct type */}
             </div>
           </div>
         </div>
