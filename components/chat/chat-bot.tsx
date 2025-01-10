@@ -36,13 +36,15 @@ export default function ChatBot() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [...messages, { role: 'user', content: userMessage }] }),
+        body: JSON.stringify({
+          messages: [...messages, { role: 'user', content: userMessage }],
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to get response');
 
       const data = await response.json();
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.message }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: data.text }]);
     } catch (error) {
       console.error('Chat error:', error);
       setMessages((prev) => [

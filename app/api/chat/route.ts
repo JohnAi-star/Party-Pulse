@@ -1,50 +1,70 @@
-import { OpenAI } from 'openai';  // Make sure the OpenAI SDK is installed
+import axios from 'axios'; // Ensure Axios is installed
 
-// Initialize OpenAI with your API key
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Ensure your environment variable is set correctly
-}); 
+// Replicate API Key (ensure it's set in your environment variables)
+const REPLICATE_API_KEY = process.env.REPLICATE_API_KEY;
+
+// Replicate Model Version ID (get this from the Replicate model page)
+const REPLICATE_MODEL_VERSION = 'dff94eaf770e1fc211e425a50b51baa8e4cac6c39ef074681f9e39d778773626'; // Replace with the specific version ID
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
   try {
-    // Send a request to OpenAI for chat completions with streaming enabled
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'system',
-          content: `You are an AI assistant for ActivityHub, a platform for booking group activities.
+    // Prepare the user input prompt based on the messages
+    const prompt = messages.map((msg: any) => `${msg.role}: ${msg.content}`).join('\n');
+
+    // Send a request to Replicate to generate text
+    const response = await axios.post(
+      'https://api.replicate.com/v1/predictions',
+      {
+        version: REPLICATE_MODEL_VERSION,
+        input: {
+          prompt: `You are an AI assistant for ActivityHub, a platform for booking group activities.
             Help users find and book activities based on their preferences.
             Be friendly and concise. Provide specific activity recommendations when possible.
-            Focus on our available categories: Team Building, Stag Parties, and Hen Parties.`,
+            Focus on our available categories: Team Building, Stag Parties, and Hen Parties.\n\n${prompt}`,
         },
-        ...messages,  // Include user-provided messages
-      ],
-      temperature: 0.7,
-      max_tokens: 200,
-      stream: true, // Enable streaming
-    });
+      },
+      {
+        headers: {
+          Authorization: `Token ${REPLICATE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-    // Collect the streaming response text
-    const streamChunks: string[] = [];
-    //@ts-ignore 
-    for await (const chunk of response[Symbol.asyncIterator]()) {
-      streamChunks.push(chunk.choices[0].text); // Push each chunk's text
+    // Get the prediction ID
+    const predictionId = response.data.id;
+
+    // Poll for the result
+    let predictionResult: any;
+    do {
+      const resultResponse = await axios.get(
+        `https://api.replicate.com/v1/predictions/${predictionId}`,
+        {
+          headers: {
+            Authorization: `Token ${REPLICATE_API_KEY}`,
+          },
+        }
+      );
+      predictionResult = resultResponse.data;
+    } while (predictionResult.status === 'starting' || predictionResult.status === 'processing');
+
+    // Check if the prediction succeeded
+    if (predictionResult.status === 'succeeded') {
+      const generatedText = predictionResult.output;
+      return new Response(JSON.stringify({ text: generatedText }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } else {
+      console.error('Error with Replicate prediction:', predictionResult.error);
+      return new Response(
+        JSON.stringify({ error: 'An error occurred during text generation.' }),
+        { status: 500 }
+      );
     }
-
-    // Join the chunks into one complete response
-    const streamResponse = streamChunks.join(""); 
-
-    // Return the final streamed response as JSON
-    return new Response(JSON.stringify({ text: streamResponse }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-
   } catch (error) {
-    // Handle errors (e.g., invalid API key, bad request)
-    console.error('Error with OpenAI streaming:', error);
+    console.error('Error with Replicate API:', error);
     return new Response(
       JSON.stringify({ error: 'An error occurred during the request.' }),
       { status: 500 }

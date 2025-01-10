@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { AuthUser } from '@/lib/types/auth';
+import { AuthUser } from '../types/auth'
 import { getCurrentUser } from './auth-service';
 
 type AuthContextType = {
@@ -29,6 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
+    //@ts-ignore
     <AuthContext.Provider value={{ user, isLoading }}>
       {children}
     </AuthContext.Provider>
