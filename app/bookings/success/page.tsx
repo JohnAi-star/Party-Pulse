@@ -5,20 +5,26 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 
-export default async function SuccessPage({
-  searchParams,
-}: {
-  searchParams: { session_id: string };
-}) {
-  if (!searchParams.session_id) {
+type Props = {
+  searchParams: {
+    session_id?: string; // Make session_id optional to avoid runtime errors
+  };
+};
+
+export default async function SuccessPage({ searchParams }: Props) {
+  const sessionId = searchParams?.session_id;
+
+  // Redirect to home if session_id is missing
+  if (!sessionId) {
     redirect('/');
+    return null; // Ensures no further rendering
   }
 
-  const session = await stripe.checkout.sessions.retrieve(
-    searchParams.session_id
-  );
+  // Retrieve session from Stripe
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (!session) {
     redirect('/');
+    return null;
   }
 
   return (
@@ -35,7 +41,7 @@ export default async function SuccessPage({
           </CardHeader>
           <CardContent className="space-y-6 text-center">
             <p className="text-lg text-gray-600">
-              Thank you for your booking! We've sent a confirmation email with all the details. 
+              Thank you for your booking! We've sent a confirmation email with all the details.
               If you have any questions, feel free to reach out.
             </p>
             <Button asChild className="w-full py-3 bg-blue-600 text-white font-medium shadow-md hover:bg-blue-700 transition duration-200">
