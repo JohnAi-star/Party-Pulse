@@ -46,9 +46,7 @@ export default function ActivityPage({ params }: Props) {
 
   return (
     <div>
-      <ActivityHeader
-      //@ts-ignore
-      activity={activity} />
+      <ActivityHeader activity={activity} />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -56,9 +54,7 @@ export default function ActivityPage({ params }: Props) {
           </div>
           <div>
             <div className="sticky top-24">
-              <BookingForm
-              //@ts-ignore
-              activity={activity} />
+              <BookingForm activity={activity} />
             </div>
           </div>
         </div>
