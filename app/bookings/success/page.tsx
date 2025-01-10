@@ -5,22 +5,20 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 
-type Props = {
-  searchParams: {
-    session_id?: string; // Make session_id optional to avoid runtime errors
-  };
-};
+export default async function SuccessPage({
+  searchParams,
+}: {
+  searchParams: Record<string, string | undefined>;
+}) {
+  const sessionId = searchParams.session_id;
 
-export default async function SuccessPage({ searchParams }: Props) {
-  const sessionId = searchParams?.session_id;
-
-  // Redirect to home if session_id is missing
+  // Redirect if session_id is missing
   if (!sessionId) {
     redirect('/');
-    return null; // Ensures no further rendering
+    return null;
   }
 
-  // Retrieve session from Stripe
+  // Fetch session details
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (!session) {
     redirect('/');
