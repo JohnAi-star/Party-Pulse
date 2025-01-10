@@ -13,7 +13,7 @@ type Props = {
 // Generate static params for all activities
 export async function generateStaticParams() {
   return activities.map((activity) => ({
-    id: activity.id,
+    id: activity.id.toString(),
   }));
 }
 
@@ -48,7 +48,7 @@ export default function ActivityPage({ params }: Props) {
     <div>
       <ActivityHeader
       //@ts-ignore
-      activity={activity} /> {/* Pass activity to ActivityHeader */}
+      activity={activity} />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
