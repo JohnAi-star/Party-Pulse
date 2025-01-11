@@ -12,7 +12,6 @@ type Props = PageProps & {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-// Generate static params for all activities
 export async function generateStaticParams() {
   return activities.map((activity) => ({
     id: activity.id,
