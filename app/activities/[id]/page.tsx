@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import { Metadata } from 'next/types';
 import { activities } from '@/lib/data/activities';
 import ActivityHeader from '@/components/activities/activity-header';
 import ActivityDetails from '@/components/activities/activity-details';
