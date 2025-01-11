@@ -6,14 +6,15 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 
 interface PageProps {
-  params: { id: string }; // Adjust for dynamic routing if necessary
-  searchParams: { session_id?: string }; // Ensure session_id is included in the query
+  params: Promise<{ id: string }>; // Adjusted to match the Promise type expected
+  searchParams: { session_id?: string }; // Include session_id as an optional query param
 }
 
 export default async function SuccessPage({
   params,
   searchParams,
-}: Awaited<PageProps>) { // Await the resolved types if params/searchParams are promises
+}: PageProps) {
+  const resolvedParams = await params; // Await the params if they are a Promise
   const sessionId = searchParams.session_id;
 
   // If session_id is missing, redirect to home
