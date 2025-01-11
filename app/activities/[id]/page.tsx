@@ -4,14 +4,16 @@ import ActivityHeader from '@/components/activities/activity-header';
 import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
-import { PageProps } from 'next';
-type Props = PageProps & {
+
+// Define the props for the page
+type Props = {
   params: {
     id: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
+// Generate static parameters for dynamic routes
 export async function generateStaticParams() {
   return activities.map((activity) => ({
     id: activity.id,
@@ -42,10 +44,10 @@ export default function ActivityPage({ params }: Props) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    notFound(); // If activity is not found, show 404
+    notFound(); // Show 404 if activity is not found
   }
 
-  const { title, date, description } = activity; // Extract required fields
+  const { title, date, description } = activity!; // Use non-null assertion since we check for existence above
 
   const handleBookingSubmit = (formData: {
     name: string;
