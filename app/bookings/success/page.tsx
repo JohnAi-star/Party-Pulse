@@ -6,17 +6,23 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 
 interface PageProps {
-  params: { id: string };
-  searchParams: { session_id?: string };
+  params: { id: string }; // Adjust this based on your route structure
+  searchParams: { session_id?: string }; // Ensure searchParams includes session_id
 }
 
-export default async function SuccessPage({ searchParams }: PageProps) {
+export default async function SuccessPage({ params, searchParams }: PageProps) {
+  console.log('Params:', params); // Debug params
+  console.log('SearchParams:', searchParams); // Debug searchParams
+
+  // Retrieve session_id from searchParams
   const sessionId = searchParams.session_id;
 
+  // Redirect if session_id is missing
   if (!sessionId) {
     redirect('/');
   }
 
+  // Retrieve session from Stripe
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (!session) {
     redirect('/');
