@@ -1,11 +1,11 @@
-import { Metadata } from 'next/types';
+import { Metadata } from 'next';
 import { activities } from '@/lib/data/activities';
 import ActivityHeader from '@/components/activities/activity-header';
 import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
 
-// Define the props for the page
+// Define Props explicitly
 interface Props {
   params: {
     id: string;
@@ -44,10 +44,10 @@ export default function ActivityPage({ params }: Props) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    notFound(); // Show 404 if activity is not found
+    return notFound(); // If activity is not found, show 404
   }
 
-  const { title, date, description } = activity!; // Use non-null assertion since we check for existence above
+  const { title, date, description } = activity!; // Non-null assertion since we check for existence above
 
   const handleBookingSubmit = (formData: {
     name: string;
