@@ -5,11 +5,15 @@ import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
 
+// Define the props for the page
 type Props = {
-  params: { id: string };
+  params: {
+    id: string;
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
-// Generate static params for all activities
+// Generate static parameters for dynamic routes
 export async function generateStaticParams() {
   return activities.map((activity) => ({
     id: activity.id,
@@ -21,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return {};
+    return {}; // Return empty metadata if activity is not found
   }
 
   return {
@@ -40,14 +44,25 @@ export default function ActivityPage({ params }: Props) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    notFound();
+    notFound(); // Show 404 if activity is not found
   }
+
+  const { title, date, description } = activity!; // Use non-null assertion since we check for existence above
+
+  const handleBookingSubmit = (formData: {
+    name: string;
+    email: string;
+    date: string;
+    time: string;
+    guests: number;
+  }) => {
+    // Handle booking logic here, e.g., send data to API or log it
+    console.log('Booking submitted:', formData);
+  };
 
   return (
     <div>
-      <ActivityHeader 
-      //@ts-ignore
-      activity={activity} />
+      <ActivityHeader title={title} date={date} description={description} />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -55,10 +70,7 @@ export default function ActivityPage({ params }: Props) {
           </div>
           <div>
             <div className="sticky top-24">
-              
-              <BookingForm 
-              //@ts-ignore
-              activity={activity} />
+              <BookingForm onSubmit={handleBookingSubmit} />
             </div>
           </div>
         </div>
