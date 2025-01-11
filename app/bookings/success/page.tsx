@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 
 interface PageProps {
-  params: Promise<{ id: string }>; // Adjusted to match the Promise type expected
+  params: { id: string }; // Adjusted to match the expected type
   searchParams: { session_id?: string }; // Include session_id as an optional query param
 }
 
