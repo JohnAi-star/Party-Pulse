@@ -1,57 +1,3 @@
-{/*import { redirect } from 'next/navigation';
-import { stripe } from '@/lib/stripe/config';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { Check } from 'lucide-react';
-
-interface PageProps {
-  params: { id: string }; // Adjusted to match the expected type
-  searchParams: { session_id?: string }; // Include session_id as an optional query param
-}
-
-export default async function SuccessPage({
-  params,
-  searchParams,
-}: PageProps) {
-  const resolvedParams = await params; // Await the params if they are a Promise
-  const sessionId = searchParams.session_id;
-
-  // If session_id is missing, redirect to home
-  if (!sessionId) {
-    redirect('/');
-  }
-
-  // Fetch session data from Stripe
-  const session = await stripe.checkout.sessions.retrieve(sessionId);
-  if (!session) {
-    redirect('/');
-  }
-
-  return (
-    <div className="container py-16">
-      <div className="mx-auto max-w-md">
-        <Card>
-          <CardHeader>
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-              <Check className="h-6 w-6 text-primary" />
-            </div>
-            <CardTitle className="text-center">Booking Confirmed!</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-center">
-            <p className="text-muted-foreground">
-              Thank you for your booking. We've sent a confirmation email with all the details.
-            </p>
-            <Button asChild>
-              <Link href="/activities">Browse More Activities</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}*/}
-
 import { redirect } from 'next/navigation';
 import { stripe } from '@/lib/stripe/config';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -60,18 +6,18 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 
 interface PageProps {
-  searchParams: { session_id?: string };
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function SuccessPage({ searchParams }: PageProps) {
-  const sessionId = searchParams.session_id;
-
-  // Redirect if session_id is missing
+export default async function SuccessPage({
+  searchParams,
+}: PageProps) {
+  const sessionId = searchParams.session_id as string;
   if (!sessionId) {
     redirect('/');
   }
 
-  // Retrieve the session
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (!session) {
     redirect('/');
@@ -101,4 +47,3 @@ export default async function SuccessPage({ searchParams }: PageProps) {
     </div>
   );
 }
-
