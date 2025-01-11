@@ -5,22 +5,20 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 
-type SuccessPageProps = {
-  searchParams: {
-    session_id?: string;
-  };
-};
+interface PageProps {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
 export default async function SuccessPage({
   searchParams,
-}: SuccessPageProps) {
-  if (!searchParams.session_id) {
+}: PageProps) {
+  const sessionId = searchParams.session_id as string;
+  if (!sessionId) {
     redirect('/');
   }
 
-  const session = await stripe.checkout.sessions.retrieve(
-    searchParams.session_id
-  );
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (!session) {
     redirect('/');
   }
