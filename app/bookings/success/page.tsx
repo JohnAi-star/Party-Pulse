@@ -6,11 +6,12 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 
 interface PageProps {
-  searchParams: { session_id?: string };
+  searchParams: Promise<{ session_id?: string }>;
 }
 
 export default async function SuccessPage({ searchParams }: PageProps) {
-  const sessionId = searchParams.session_id;
+  const resolvedSearchParams = await searchParams;
+  const sessionId = resolvedSearchParams.session_id;
 
   // Redirect if session_id is missing
   if (!sessionId) {
