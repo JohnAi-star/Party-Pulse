@@ -6,18 +6,18 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 
 interface PageProps {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { session_id?: string };
 }
 
-export default async function SuccessPage({
-  searchParams,
-}: PageProps) {
-  const sessionId = searchParams.session_id as string;
+export default async function SuccessPage({ searchParams }: PageProps) {
+  const sessionId = searchParams.session_id;
+
+  // Redirect if session_id is missing
   if (!sessionId) {
     redirect('/');
   }
 
+  // Retrieve the session
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (!session) {
     redirect('/');
