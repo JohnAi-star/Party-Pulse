@@ -5,21 +5,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 
-// Define the type explicitly to match Next.js requirements
-type Props = {
-  searchParams: { session_id?: string };
-};
+// Explicitly defining the Props type
+interface Props {
+  searchParams: Record<string, string | undefined>;
+}
 
 export default async function SuccessPage({ searchParams }: Props) {
   const sessionId = searchParams?.session_id;
 
-  // Redirect if session_id is missing
   if (!sessionId) {
     redirect('/');
   }
 
   try {
-    // Fetch session details from Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (!session) {
