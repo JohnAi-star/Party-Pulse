@@ -6,15 +6,15 @@ import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
 
 // Define the props for the page
-type Props = {
+interface Props {
   params: {
     id: string;
   };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
+  searchParams?: Record<string, string | string[] | undefined>;
+}
 
 // Generate static parameters for dynamic routes
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<Array<{ id: string }>> {
   return activities.map((activity) => ({
     id: activity.id,
   }));
