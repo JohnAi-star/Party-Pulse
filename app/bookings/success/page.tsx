@@ -7,13 +7,12 @@ import { Check } from 'lucide-react';
 
 interface PageProps {
   params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { session_id?: string };
 }
 
-export default async function SuccessPage({
-  searchParams,
-}: PageProps) {
-  const sessionId = searchParams.session_id as string;
+export default async function SuccessPage({ searchParams }: PageProps) {
+  const sessionId = searchParams.session_id;
+
   if (!sessionId) {
     redirect('/');
   }
@@ -35,8 +34,7 @@ export default async function SuccessPage({
           </CardHeader>
           <CardContent className="space-y-4 text-center">
             <p className="text-muted-foreground">
-              Thank you for your booking. We've sent a confirmation email with
-              all the details.
+              Thank you for your booking. We've sent a confirmation email with all the details.
             </p>
             <Button asChild>
               <Link href="/activities">Browse More Activities</Link>
