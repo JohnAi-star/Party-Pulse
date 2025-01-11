@@ -5,13 +5,12 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 
-// Explicitly defining the Props type
-interface Props {
-  searchParams: Record<string, string | undefined>;
+interface SuccessPageProps {
+  searchParams: { session_id?: string }; // Explicitly define the type
 }
 
-export default async function SuccessPage({ searchParams }: Props) {
-  const sessionId = searchParams?.session_id;
+export default async function SuccessPage({ searchParams }: SuccessPageProps) {
+  const sessionId = searchParams.session_id;
 
   if (!sessionId) {
     redirect('/');
