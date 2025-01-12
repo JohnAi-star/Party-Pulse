@@ -47,8 +47,6 @@ export default function ActivityPage({ params }: Props) {
     return notFound(); // If activity is not found, show 404
   }
 
-  const { title, date, description } = activity!; // Non-null assertion since we check for existence above
-
   const handleBookingSubmit = (formData: {
     name: string;
     email: string;
@@ -62,7 +60,11 @@ export default function ActivityPage({ params }: Props) {
 
   return (
     <div>
-      <ActivityHeader title={title} date={date} description={description} />
+      <ActivityHeader
+        title={activity.title}
+        date={activity.date} // Ensure `date` exists in the `Activity` type
+        description={activity.description}
+      />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
