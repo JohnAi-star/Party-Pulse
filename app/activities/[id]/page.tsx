@@ -7,25 +7,23 @@ import { notFound } from 'next/navigation';
 
 // Define Props explicitly
 interface Props {
-  params: {
-    id: string;
-  };
+  params: { id: string };
   searchParams?: Record<string, string | string[] | undefined>;
 }
 
 // Generate static parameters for dynamic routes
-export async function generateStaticParams(): Promise<Array<{ id: string }>> {
+export async function generateStaticParams() {
   return activities.map((activity) => ({
     id: activity.id,
   }));
 }
 
 // Generate metadata dynamically based on the activity
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return {}; // Return empty metadata if activity is not found
+    return {};
   }
 
   return {
@@ -40,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // Dynamic route page component
-export default function ActivityPage({ params }: Props) {
+export default function ActivityPage({ params }: { params: { id: string } }) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
@@ -54,7 +52,7 @@ export default function ActivityPage({ params }: Props) {
     time: string;
     guests: number;
   }) => {
-    // Handle booking logic here, e.g., send data to API or log it
+    // Handle booking logic here
     console.log('Booking submitted:', formData);
   };
 
