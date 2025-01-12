@@ -8,8 +8,8 @@ export type Activity = {
   location: string;
   duration: string;
   groupSize: string;
-  highlights?: string[];
-  included?: string[];
-  requirements?: string[];
-  cancellationPolicy?: string;
+  highlights: string[];
+  included: string[];
+  requirements: string[];
+  cancellationPolicy: string;
 };
