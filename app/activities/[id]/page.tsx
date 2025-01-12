@@ -5,10 +5,10 @@ import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
+type Props = {
   params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+  searchParams: Record<string, string | string[] | undefined>;
+};
 
 // Generate static params for all activities
 export async function generateStaticParams() {
@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata dynamically based on the activity
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 // Dynamic route page component
-export default function ActivityPage({ params }: PageProps) {
+export default function ActivityPage({ params }: Props) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
@@ -46,9 +46,7 @@ export default function ActivityPage({ params }: PageProps) {
 
   return (
     <div>
-      <ActivityHeader 
-      //@ts-ignore
-      activity={activity} />
+      <ActivityHeader activity={activity} />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -56,9 +54,7 @@ export default function ActivityPage({ params }: PageProps) {
           </div>
           <div>
             <div className="sticky top-24">
-              <BookingForm 
-              //@ts-ignore
-              activity={activity} />
+              <BookingForm activity={activity} />
             </div>
           </div>
         </div>
