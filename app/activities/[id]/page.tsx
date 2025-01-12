@@ -5,12 +5,13 @@ import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
 
-type Props = {
+// Define Props explicitly
+interface Props {
   params: { id: string };
-  searchParams: Record<string, string | string[] | undefined>;
-};
+  searchParams?: Record<string, string | string[] | undefined>;
+}
 
-// Generate static params for all activities
+// Generate static parameters for dynamic routes
 export async function generateStaticParams() {
   return activities.map((activity) => ({
     id: activity.id,
@@ -18,7 +19,7 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata dynamically based on the activity
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
@@ -37,16 +38,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // Dynamic route page component
-export default function ActivityPage({ params }: Props) {
+export default function ActivityPage({ params }: { params: { id: string } }) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    notFound();
+    return notFound(); // If activity is not found, show 404
   }
+
+  const handleBookingSubmit = (formData: {
+    name: string;
+    email: string;
+    date: string;
+    time: string;
+    guests: number;
+  }) => {
+    // Handle booking logic here
+    console.log('Booking submitted:', formData);
+  };
 
   return (
     <div>
-      <ActivityHeader activity={activity} />
+      <ActivityHeader
+        title={activity.title}
+        date={activity.date} // Ensure `date` exists in the `Activity` type
+        description={activity.description}
+      />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -54,7 +70,7 @@ export default function ActivityPage({ params }: Props) {
           </div>
           <div>
             <div className="sticky top-24">
-              <BookingForm activity={activity} />
+              <BookingForm onSubmit={handleBookingSubmit} />
             </div>
           </div>
         </div>
